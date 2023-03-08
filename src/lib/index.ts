@@ -2,8 +2,9 @@ import Matter from 'matter-js';
 
 export default class TroubleInMiami {
 
+    private render: Matter.Render;
+
     constructor(elementToRenderGame: HTMLElement) {
-        console.log(elementToRenderGame)
         var Engine = Matter.Engine,
             Render = Matter.Render,
             Runner = Matter.Runner,
@@ -18,7 +19,7 @@ export default class TroubleInMiami {
             world = engine.world;
         
         // create renderer
-        var render = Render.create({
+        this.render = Render.create({
             element: elementToRenderGame,
             engine: engine,
             options: {
@@ -28,7 +29,7 @@ export default class TroubleInMiami {
             }
         });
         
-        Render.run(render);
+        Render.run(this.render);
         
         // create runner
         var runner = Runner.create();
@@ -49,11 +50,11 @@ export default class TroubleInMiami {
         ]);
         
         // add mouse control
-        var mouse = Mouse.create(render.canvas),
+        var mouse = Mouse.create(this.render.canvas),
             mouseConstraint = MouseConstraint.create(engine, {
                 mouse: mouse,
                 constraint: {
-                    stiffness: 0.2,
+                    stiffness: 1,
                     render: {
                         visible: false
                     }
@@ -63,13 +64,21 @@ export default class TroubleInMiami {
         Composite.add(world, mouseConstraint);
         
         // keep the mouse in sync with rendering
-        render.mouse = mouse;
+        this.render.mouse = mouse;
         
         // fit the render viewport to the scene
-        Render.lookAt(render, {
+        Render.lookAt(this.render, {
             min: { x: 0, y: 0 },
             max: { x: 800, y: 600 }
         });
+
+    }
+
+    zoom(scaleIncrease: number) {
+        this.render.bounds.min.x -= scaleIncrease;
+        this.render.bounds.min.y -= scaleIncrease;
+        this.render.bounds.max.x += scaleIncrease;
+        this.render.bounds.max.y += scaleIncrease;
     }
 
 }

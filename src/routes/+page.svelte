@@ -36,10 +36,15 @@
     import { onMount } from 'svelte';
     import TroubleInMiami from '../lib';
 
+    let game: TroubleInMiami;
+
     onMount(() => {
 
         const gameElement = document.getElementById("game") as HTMLElement;
-        new TroubleInMiami(gameElement);
+        game = new TroubleInMiami(gameElement);
+        gameElement.addEventListener("wheel", (e: WheelEvent) => {
+            game.zoom(e.deltaY / 5);
+        })
     })
 
     
