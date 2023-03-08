@@ -1,10 +1,8 @@
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <div class="modal__wrapper"
-    on:click={close}
+    on:click|self={close}
 >
-    <div class="modal">
-        <slot></slot>
-    </div>
+    <slot></slot>
 </div>
 
 <script lang="ts">
@@ -13,7 +11,6 @@
     const dispatch = createEventDispatcher();
 
     function close() {
-        console.log("close")
         dispatch("close");
     }
 </script>
@@ -29,11 +26,5 @@
         display: flex;
         align-items: center;
         justify-content: center;
-    }
-
-    .modal {
-        background: white;
-        padding: 10px;
-        border-radius: 4px;
     }
 </style>
