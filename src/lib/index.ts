@@ -1,8 +1,9 @@
-import Matter from 'matter-js';
+import Matter, { Body } from 'matter-js';
 
 export default class TroubleInMiami {
 
     private render: Matter.Render;
+    private playerBody: Matter.Body;
 
     constructor(elementToRenderGame: HTMLElement) {
         var Engine = Matter.Engine,
@@ -15,8 +16,12 @@ export default class TroubleInMiami {
             Bodies = Matter.Bodies;
         
         // create engine
-        var engine = Engine.create(),
-            world = engine.world;
+        var engine = Engine.create({
+            gravity: {
+                scale: 0
+            }
+        });
+        let world = engine.world;
         
         // create renderer
         this.render = Render.create({
@@ -39,6 +44,8 @@ export default class TroubleInMiami {
         // var stack = Composites.stack(100, 600 - 21 - 20 * 20, 10, 10, 20, 0, function(x, y) {
         //     return Bodies.circle(x, y, 20);
         // });
+
+        this.playerBody = Bodies.circle(40, 40, 20);
         
         Composite.add(world, [
             // walls
@@ -46,7 +53,7 @@ export default class TroubleInMiami {
             Bodies.rectangle(400, 600, 800, 50, { isStatic: true }),
             Bodies.rectangle(800, 300, 50, 600, { isStatic: true }),
             Bodies.rectangle(0, 300, 50, 600, { isStatic: true }),
-            Bodies.circle(40, 40, 20)
+            this.playerBody
         ]);
         
         // add mouse control
@@ -79,6 +86,26 @@ export default class TroubleInMiami {
         this.render.bounds.min.y -= scaleIncrease;
         this.render.bounds.max.x += scaleIncrease;
         this.render.bounds.max.y += scaleIncrease;
+    }
+
+    moveUp() {
+        const newPosition: Matter.Vector = {x: this.playerBody.position.x, y: this.playerBody.position.y - 10};
+        Body.setPosition(this.playerBody, newPosition);
+    }
+
+    moveDown() {
+        const newPosition: Matter.Vector = {x: this.playerBody.position.x, y: this.playerBody.position.y + 10};
+        Body.setPosition(this.playerBody, newPosition);
+    }
+
+    moveLeft() {
+        const newPosition: Matter.Vector = {x: this.playerBody.position.x - 10, y: this.playerBody.position.y};
+        Body.setPosition(this.playerBody, newPosition);
+    }
+
+    moveRight() {
+        const newPosition: Matter.Vector = {x: this.playerBody.position.x + 10, y: this.playerBody.position.y};
+        Body.setPosition(this.playerBody, newPosition);
     }
 
 }

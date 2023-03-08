@@ -45,6 +45,20 @@
         gameElement.addEventListener("wheel", (e: WheelEvent) => {
             game.zoom(e.deltaY / 5);
         })
+        document.addEventListener("keypress", (e: KeyboardEvent) => {
+            if (e.code === "KeyW") {
+                game.moveUp();
+            }
+            if (e.code === "KeyS") {
+                game.moveDown();
+            }
+            if (e.code === "KeyA") {
+                game.moveLeft();
+            }
+            if (e.code === "KeyD") {
+                game.moveRight();
+            }
+        })
     })
 
     
